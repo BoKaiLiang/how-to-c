@@ -4,6 +4,7 @@
 // How to get string size from input?
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stddef.h>
 #include <locale.h>
 
@@ -42,6 +43,8 @@ int main() {
     printf("%s", output);
 
     // To file stream
+    // Ref: http://www.cplusplus.com/reference/cstdio/fscanf/
+
     char pi_str [80];
     float pi_f;
     FILE* file = fopen ("build/file.txt","w+");
@@ -65,11 +68,51 @@ int main() {
     scanf ("%79s",str);  
 
     printf ("Enter your age: ");
-    scanf ("%d",&i);
+    scanf ("%d",&a);
     printf ("Mr. %s , %d years old.\n",str,a);
     printf ("Enter a hexadecimal number: ");
     scanf ("%x",&i);
-    printf ("You have entered %#x (%d).\n",a,a);
+    printf ("You have entered %#x (%d).\n",i,i);
+
+
+    // How about `put` and `get`
+    // `putc` and `fputc` have same behavior, but `fputc` is implemented as function, rather than macro.
+    // The last character of `putc` and `getc` is stand for "character".
+    // ------------------------------------------------------
+    // `fgets` and `fputs` mean get and write string to stdout / stdin.
+
+    // fputc
+    int ret_code = 0;
+    for (char c = 'a'; (ret_code != EOF) && (c != 'z'); c++)
+        ret_code = fputc(c, stdout);
+
+    // fputs
+    fputs("\nHello c programming\n", stdout);
+
+    // fgetc
+    FILE* fp = fopen("res/Three_little_pigs.txt", "r");
+    if (!fp) {
+        perror("File opening failed");
+        return EXIT_FAILURE;
+    }
+
+    int c;
+    while(EOF != (c = fgetc(fp))) {
+        fputc(c, stdout);
+    }
+    fclose(fp);
+    
+    // fgets (`gets` is removed from C11)
+    FILE* tmpf = fopen("build/pioneer.txt", "w+");
+    fputs("Alan Turing\n", tmpf);
+    fputs("John von Neumann\n", tmpf);
+    fputs("Alonzo Church\n", tmpf);
+
+    rewind(tmpf);
+
+    char buf[12];
+    while (fgets(buf, sizeof(buf), tmpf) != NULL)
+          printf("\"%s\"\n", buf);
 
     return 0;
 }
