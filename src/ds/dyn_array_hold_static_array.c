@@ -1,5 +1,3 @@
-//// `dynarr_pop` is not yet. ////
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -59,11 +57,8 @@ void dynarr_pop(vec4_dynarr* dynarr, vec4 dst) {
         return;
     }
 
-    // memcpy(dst, &dynarr->arr[dynarr->count--], sizeof(vec4));
-    dst[0] = dynarr->arr[dynarr->count--][0];
-    dst[1] = dynarr->arr[dynarr->count--][1];
-    dst[2] = dynarr->arr[dynarr->count--][2];
-    dst[3] = dynarr->arr[dynarr->count--][3];
+    dynarr->count--;
+    memcpy(dst, &dynarr->arr[dynarr->count], sizeof(vec4));
 
     if (dynarr->count * 2 < dynarr->size) {
         dynarr->size /= 2;
@@ -104,12 +99,16 @@ int main() {
     dynarr_push(&arr, (vec4){ 1.0f, 2.0f, 3.0f, 4.0f });
     dynarr_push(&arr, (vec4){ 1.0f, 2.0f, 3.0f, 4.0f });
 
-#if 0
-    vec4 out = { 0.0f, 0.0f, 0.0f, 0.0f };
-    dynarr_pop(&arr, out);
-#endif
+
+    vec4 out1 = { 0.0f, 0.0f, 0.0f, 0.0f };
+    vec4 out2 = { 0.0f, 0.0f, 0.0f, 0.0f };
+    dynarr_pop(&arr, out1);
+    dynarr_pop(&arr, out2);
 
     dynarr_debug(&arr);
+
+    printf("Out 1: = [ %f\t%f\t%f\t%f ]\n", out1[0], out1[1], out1[2], out1[3]);
+    printf("Out 2: = [ %f\t%f\t%f\t%f ]\n", out2[0], out2[1], out2[2], out2[3]);
 
     dynarr_free(&arr);
 
