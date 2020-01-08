@@ -4,6 +4,7 @@ project(IO_read_file)
 project(IO_formatted_io)
 project(OOP_struct_with_union)
 project(DS_dyn_array_hold_static_array)
+project(DS_darray_use_like_cppvec)
 
 set (CMAKE_C_STANDARD 11)
 
@@ -28,4 +29,9 @@ add_executable(
 add_executable(
     DS_dyn_array_hold_static_array
     src/ds/dyn_array_hold_static_array.c
+)
+
+add_executable(
+    DS_darray_use_like_cppvec
+    src/ds/darray-use-like-cppvec.c
 )
